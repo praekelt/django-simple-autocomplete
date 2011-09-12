@@ -69,13 +69,14 @@ class AutoCompleteWidget(Widget):
                 url: "%s",
                 data: {q: request.term},
                 success: function(data) {
-                    response($.map(data, function(item) {
-                        return {
-                            label: item[1],
-                            value: item[1],
-                            real_value: item[0]
-                        };
-                    }));
+                    if (data != 'CACHE_MISS')                    
+                        response($.map(data, function(item) {
+                            return {
+                                label: item[1],
+                                value: item[1],
+                                real_value: item[0]
+                            };
+                        }));
                 },
                 dataType: "json"
             });
