@@ -20,13 +20,15 @@ def ModelChoiceField__init__(self, queryset, empty_label=u"---------", cache_cho
     self.cache_choices = cache_choices
 
     # Monkey starts here
-    key = '%s.%s' % (queryset.model._meta.app_label, queryset.model._meta.module_name)
-    if key in getattr(settings, 'SIMPLE_AUTOCOMPLETE_MODELS', []):
-        ctid = ContentType.objects.get_for_model(queryset.model).id
-        pickled = pickle.dumps((ctid, queryset.query))
-        token = hashlib.md5(pickled).hexdigest()
-        _simple_autocomplete_queryset_cache[token] = pickled
-        widget = AutoCompleteWidget(token=token, model=queryset.model)
+    # Do not apply patch to subclasses like ModelMultipleChoiceField
+    if self.__class__ ==  ModelChoiceField:
+        key = '%s.%s' % (queryset.model._meta.app_label, queryset.model._meta.module_name)
+        if key in getattr(settings, 'SIMPLE_AUTOCOMPLETE_MODELS', []):
+            ctid = ContentType.objects.get_for_model(queryset.model).id
+            pickled = pickle.dumps((ctid, queryset.query))
+            token = hashlib.md5(pickled).hexdigest()
+            _simple_autocomplete_queryset_cache[token] = pickled
+            widget = AutoCompleteWidget(token=token, model=queryset.model)
     # Monkey ends here        
 
     # Call Field instead of ChoiceField __init__() because we don't need
