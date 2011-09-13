@@ -1,9 +1,12 @@
+import pickle
+
 from django.forms.widgets import Widget
 from django.utils.safestring import mark_safe
-from django.db.models.fields import FieldDoesNotExist, CharField
+from django.db.models.query import QuerySet
 from django.core.urlresolvers import reverse
 
 from simple_autocomplete.monkey import _simple_autocomplete_queryset_cache
+from simple_autocomplete.utils import get_search_fieldname
 
 class AutoCompleteWidget(Widget):
     input_type = 'autocomplete'
@@ -41,23 +44,12 @@ class AutoCompleteWidget(Widget):
             display = self.initial_display
 
         else:
-            # If model has field 'title' then use that, else use the first 
-            # CharField on model.
-            fieldname = ''
-            try:
-                self.model._meta.get_field_by_name('title')
-                fieldname = 'title'
-            except FieldDoesNotExist:
-                for field in self.model._meta.fields:
-                    if isinstance(field, CharField):
-                        fieldname = field.name
-                        break                
-            if not fieldname:
-                raise RuntimeError, "Cannot determine fieldname"
-
-            url = reverse('simple-autocomplete', args=[self.token, fieldname])
+            fieldname = get_search_fieldname(self.model)
+            url = reverse('simple-autocomplete', args=[self.token])
             if value:            
-                display = getattr(_simple_autocomplete_queryset_cache[self.token].get(pk=value), fieldname)
+                dc, query = pickle.loads(_simple_autocomplete_queryset_cache[self.token])
+                queryset = QuerySet(model=self.model, query=query)
+                display = getattr(queryset.get(pk=value), fieldname)
 
         html = """
     <script type="text/javascript">

@@ -2,5 +2,5 @@ from django.conf.urls.defaults import patterns, url
 
 urlpatterns = patterns(
     'simple_autocomplete.views',
-    url(r'^(?P<token>[\d-]+)/(?P<fieldname>[\w-]+)?/$', 'get_json', name='simple-autocomplete'),
+    url(r'^(?P<token>[\w-]+)/$', 'get_json', name='simple-autocomplete'),
 )
