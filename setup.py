@@ -15,6 +15,10 @@ setup(
     install_requires = [
         'django',
     ],
+    tests_require=[
+        'django-setuptest>=0.0.6',
+    ],
+    test_suite="setuptest.SetupTestSuite",
     classifiers=[
         "Programming Language :: Python",
         "License :: OSI Approved :: BSD License",
