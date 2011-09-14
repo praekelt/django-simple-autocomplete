@@ -22,3 +22,5 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
+
+SIMPLE_AUTOCOMPLETE_MODELS = ('auth.user',)
