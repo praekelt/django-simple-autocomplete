@@ -25,5 +25,4 @@ def get_json(request, token):
                 result.append((item.id, getattr(item, fieldname)))
         else:
             result = 'CACHE_MISS'
-        print result            
     return HttpResponse(simplejson.dumps(result))
