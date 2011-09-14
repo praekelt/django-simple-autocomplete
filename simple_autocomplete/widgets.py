@@ -47,7 +47,7 @@ class AutoCompleteWidget(Widget):
             fieldname = get_search_fieldname(self.model)
             url = reverse('simple-autocomplete', args=[self.token])
             if value:            
-                dc, query = pickle.loads(_simple_autocomplete_queryset_cache[self.token])
+                dc, dc, query = pickle.loads(_simple_autocomplete_queryset_cache[self.token])
                 queryset = QuerySet(model=self.model, query=query)
                 display = getattr(queryset.get(pk=value), fieldname)
 
