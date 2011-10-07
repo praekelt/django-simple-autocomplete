@@ -1,6 +1,6 @@
 import pickle
 
-from django.forms.widgets import Widget
+from django.forms.widgets import Select
 from django.utils.safestring import mark_safe
 from django.db.models.query import QuerySet
 from django.core.urlresolvers import reverse
@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from simple_autocomplete.monkey import _simple_autocomplete_queryset_cache
 from simple_autocomplete.utils import get_search_fieldname
 
-class AutoCompleteWidget(Widget):
+class AutoCompleteWidget(Select):
     input_type = 'autocomplete'
     url = None
     initial_display = None
@@ -44,14 +44,18 @@ class AutoCompleteWidget(Widget):
             display = self.initial_display
 
         else:
-            fieldname = get_search_fieldname(self.model)
-            url = reverse('simple-autocomplete', args=[self.token])
-            if value:            
-                dc, dc, query = pickle.loads(_simple_autocomplete_queryset_cache[self.token])
-                queryset = QuerySet(model=self.model, query=query)
-                display = getattr(queryset.get(pk=value), fieldname)
+            dc, dc, query = pickle.loads(_simple_autocomplete_queryset_cache[self.token])
+            queryset = QuerySet(model=self.model, query=query)
+            if queryset.count() < 30:
+                # Render the normal select widget if size below threshold
+                return super(AutoCompleteWidget, self).render(name, value, attrs)
+            else:
+                url = reverse('simple-autocomplete', args=[self.token])
+                fieldname = get_search_fieldname(self.model)            
+                if value:            
+                    display = getattr(queryset.get(pk=value), fieldname)
 
-        html = """
+            html = """
     <script type="text/javascript">
     $(document).ready(function(){
 
@@ -82,7 +86,7 @@ class AutoCompleteWidget(Widget):
 
 <input id="id_%s_helper" type="text" value="%s" />
 <input name="%s" id="id_%s" type="hidden" value="%s" />""" % (name, url, name, name, display, name, name, value)
-        return mark_safe(html)
+            return mark_safe(html)
 
     def value_from_datadict(self, data, files, name):
         return data.get(name, None)
