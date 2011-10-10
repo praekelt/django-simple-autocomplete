@@ -1,13 +1,14 @@
 import pickle
 import hashlib
 
-from django.forms.models import ModelChoiceField
+from django.forms.models import ModelChoiceField, ModelMultipleChoiceField
 from django.conf import settings
 from django.forms.fields import Field
 
 _simple_autocomplete_queryset_cache = {}
 
-from simple_autocomplete.widgets import AutoCompleteWidget
+from simple_autocomplete.widgets import AutoCompleteWidget, \
+    AutoCompleteMultipleWidget
 
 def ModelChoiceField__init__(self, queryset, empty_label=u"---------", cache_choices=False,
              required=True, widget=None, label=None, initial=None,
@@ -19,8 +20,7 @@ def ModelChoiceField__init__(self, queryset, empty_label=u"---------", cache_cho
     self.cache_choices = cache_choices
 
     # Monkey starts here
-    # Do not apply patch to subclasses like ModelMultipleChoiceField
-    if self.__class__ ==  ModelChoiceField:
+    if self.__class__ in (ModelChoiceField, ModelMultipleChoiceField):
         key = '%s.%s' % (queryset.model._meta.app_label, queryset.model._meta.module_name)
         if key in getattr(settings, 'SIMPLE_AUTOCOMPLETE_MODELS', []):
             pickled = pickle.dumps((
@@ -30,7 +30,10 @@ def ModelChoiceField__init__(self, queryset, empty_label=u"---------", cache_cho
             ))
             token = hashlib.md5(pickled).hexdigest()
             _simple_autocomplete_queryset_cache[token] = pickled
-            widget = AutoCompleteWidget(token=token, model=queryset.model)
+            if self.__class__ == ModelChoiceField:
+                widget = AutoCompleteWidget(token=token, model=queryset.model)
+            else:
+                widget = AutoCompleteMultipleWidget(token=token, model=queryset.model)
     # Monkey ends here        
 
     # Call Field instead of ChoiceField __init__() because we don't need
