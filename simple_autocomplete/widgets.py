@@ -182,5 +182,9 @@ class AutoCompleteMultipleWidget(SelectMultiple):
 %s <a href="#" title="Remove" onclick="$(this).parent().remove(); return false;">x<small></small></a></p>""" % (name, v, display)
 
             html += "</div>"
+
+            # Help with green plus icon alignment
+            html += """<div style="display: inline-block; width: 104px;">&nbsp;</div>"""
+
             return mark_safe(html)
 
