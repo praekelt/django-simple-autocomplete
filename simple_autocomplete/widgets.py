@@ -7,7 +7,9 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 
 from simple_autocomplete.monkey import _simple_autocomplete_queryset_cache
-from simple_autocomplete.utils import get_search_fieldname, get_threshold_for_model
+from simple_autocomplete.utils import get_search_fieldname, \
+    get_threshold_for_model
+
 
 class AutoCompleteWidget(Select):
     input_type = 'autocomplete'
@@ -16,10 +18,11 @@ class AutoCompleteWidget(Select):
     token = None
     model = None
 
-    def __init__(self, url=None, initial_display=None, token=None, model=None, *args, **kwargs):
+    def __init__(self, url=None, initial_display=None, token=None,
+        model=None, *args, **kwargs):
         """
         url: a custom URL that returns JSON with format [(value, label),(value,
-        label),...].  
+        label),...].
 
         initial_display: if url is provided then initial_display is the initial
         content of the autocomplete box, eg. "John Smith".
@@ -38,25 +41,29 @@ class AutoCompleteWidget(Select):
     def render(self, name, value, attrs=None):
         if value is None:
             value = ''
-      
+
         display = ''
         if self.url:
             url = self.url
             display = self.initial_display
 
         else:
-            dc, dc, query = pickle.loads(_simple_autocomplete_queryset_cache[self.token])
+            dc, dc, query = pickle.loads(
+                _simple_autocomplete_queryset_cache[self.token]
+            )
             queryset = QuerySet(model=self.model, query=query)
             threshold = get_threshold_for_model(self.model)
             if threshold and (queryset.count() < threshold):
                 # Render the normal select widget if size below threshold
-                return super(AutoCompleteWidget, self).render(name, value, attrs)
+                return super(AutoCompleteWidget, self).render(
+                    name, value, attrs
+                )
             else:
                 url = reverse('simple-autocomplete', args=[self.token])
-                fieldname = get_search_fieldname(self.model)            
-                if value:            
+                fieldname = get_search_fieldname(self.model)
+                if value:
                     display = getattr(queryset.get(pk=value), fieldname)
-            
+
             html = """
     <script type="text/javascript">
     $(document).ready(function(){
@@ -67,7 +74,7 @@ class AutoCompleteWidget(Select):
                 url: "%(url)s",
                 data: {q: request.term},
                 success: function(data) {
-                    if (data != 'CACHE_MISS')                    
+                    if (data != 'CACHE_MISS')
                         response($.map(data, function(item) {
                             return {
                                 label: item[1],
@@ -99,10 +106,11 @@ class AutoCompleteMultipleWidget(SelectMultiple):
     token = None
     model = None
 
-    def __init__(self, url=None, initial_display=None, token=None, model=None, *args, **kwargs):
+    def __init__(self, url=None, initial_display=None, token=None,
+        model=None, *args, **kwargs):
         """
         url: a custom URL that returns JSON with format [(value, label),(value,
-        label),...].  
+        label),...].
 
         initial_display: if url is provided then initial_display is a
         dictionary containing the initial content of the autocomplete box, eg.
@@ -123,7 +131,7 @@ class AutoCompleteMultipleWidget(SelectMultiple):
     def render(self, name, value, attrs=None):
         if value is None:
             value = []
-      
+
         display = ''
         if self.url:
             url = self.url
@@ -131,15 +139,19 @@ class AutoCompleteMultipleWidget(SelectMultiple):
             # Will probably have to be a dictionary.
             display = self.initial_display
         else:
-            dc, dc, query = pickle.loads(_simple_autocomplete_queryset_cache[self.token])
+            dc, dc, query = pickle.loads(
+                _simple_autocomplete_queryset_cache[self.token]
+            )
             queryset = QuerySet(model=self.model, query=query)
             threshold = get_threshold_for_model(self.model)
             if threshold and (queryset.count() < threshold):
                 # Render the normal select widget if size below threshold
-                return super(AutoCompleteMultipleWidget, self).render(name, value, attrs)
+                return super(AutoCompleteMultipleWidget, self).render(
+                    name, value, attrs
+                )
             else:
                 url = reverse('simple-autocomplete', args=[self.token])
-                fieldname = get_search_fieldname(self.model)            
+                fieldname = get_search_fieldname(self.model)
 
             html = """
     <script type="text/javascript">
@@ -151,7 +163,7 @@ class AutoCompleteMultipleWidget(SelectMultiple):
                 url: "%s",
                 data: {q: request.term},
                 success: function(data) {
-                    if (data != 'CACHE_MISS')                    
+                    if (data != 'CACHE_MISS')
                         response($.map(data, function(item) {
                             return {
                                 label: item[1],
@@ -163,11 +175,11 @@ class AutoCompleteMultipleWidget(SelectMultiple):
                 dataType: "json"
             });
         },
-        select: function(event, ui) { 
+        select: function(event, ui) {
             var name = '%s';
             var parent = $('#id_' + name).parent();
             var target = $('div.autocomplete-placeholder', parent);
-            target.append('<p><input name="' + name + '" value="' + ui.item.real_value + '" type="hidden" />' + ui.item.value + ' <a href="#" title="Remove" onclick="$(this).parent().remove(); return false;">x<small></small></a></p>'); 
+            target.append('<p><input name="' + name + '" value="' + ui.item.real_value + '" type="hidden" />' + ui.item.value + ' <a href="#" title="Remove" onclick="$(this).parent().remove(); return false;">x<small></small></a></p>');
         },
         minLength: 3
     });
@@ -180,7 +192,7 @@ class AutoCompleteMultipleWidget(SelectMultiple):
 <div class="autocomplete-placeholder">""" % (name, url, name, name, name)
 
             # Create html for existing values
-            for v in value:               
+            for v in value:
                 display = getattr(queryset.get(pk=v), fieldname)
                 html += """<p><input name="%s" type="hidden" value="%s" />
 %s <a href="#" title="Remove" onclick="$(this).parent().remove(); return false;">x<small></small></a></p>""" % (name, v, display)
@@ -192,4 +204,3 @@ class AutoCompleteMultipleWidget(SelectMultiple):
             html += """<div style="display: inline-block; width: 104px;">&nbsp;</div>"""
 
             return mark_safe(html)
-

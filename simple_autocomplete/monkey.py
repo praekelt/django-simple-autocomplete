@@ -10,9 +10,10 @@ _simple_autocomplete_queryset_cache = {}
 from simple_autocomplete.widgets import AutoCompleteWidget, \
     AutoCompleteMultipleWidget
 
-def ModelChoiceField__init__(self, queryset, empty_label=u"---------", cache_choices=False,
-             required=True, widget=None, label=None, initial=None,
-             help_text=None, to_field_name=None, *args, **kwargs):
+
+def ModelChoiceField__init__(self, queryset, empty_label=u"---------",
+        cache_choices=False, required=True, widget=None, label=None,
+        initial=None, help_text=None, to_field_name=None, *args, **kwargs):
     if required and (initial is not None):
         self.empty_label = None
     else:
@@ -21,14 +22,18 @@ def ModelChoiceField__init__(self, queryset, empty_label=u"---------", cache_cho
 
     # Monkey starts here
     if self.__class__ in (ModelChoiceField, ModelMultipleChoiceField):
-        key = '%s.%s' % (queryset.model._meta.app_label, queryset.model._meta.module_name)
+        meta = queryset.model._meta
+        key = '%s.%s' % (meta.app_label, meta.module_name)
         # Handle both legacy settings SIMPLE_AUTOCOMPLETE_MODELS and new
         # setting SIMPLE_AUTOCOMPLETE.
-        models = getattr(settings, 'SIMPLE_AUTOCOMPLETE_MODELS', getattr(settings, 'SIMPLE_AUTOCOMPLETE', {}).keys()) 
+        models = getattr(
+            settings, 'SIMPLE_AUTOCOMPLETE_MODELS',
+            getattr(settings, 'SIMPLE_AUTOCOMPLETE', {}).keys()
+        )
         if key in models:
             pickled = pickle.dumps((
-                queryset.model._meta.app_label, 
-                queryset.model._meta.module_name, 
+                queryset.model._meta.app_label,
+                queryset.model._meta.module_name,
                 queryset.query
             ))
             token = hashlib.md5(pickled).hexdigest()
@@ -36,8 +41,10 @@ def ModelChoiceField__init__(self, queryset, empty_label=u"---------", cache_cho
             if self.__class__ == ModelChoiceField:
                 widget = AutoCompleteWidget(token=token, model=queryset.model)
             else:
-                widget = AutoCompleteMultipleWidget(token=token, model=queryset.model)
-    # Monkey ends here        
+                widget = AutoCompleteMultipleWidget(
+                    token=token, model=queryset.model
+                )
+    # Monkey ends here
 
     # Call Field instead of ChoiceField __init__() because we don't need
     # ChoiceField.__init__().
