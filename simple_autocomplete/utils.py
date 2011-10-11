@@ -1,4 +1,5 @@
 from django.db.models.fields import FieldDoesNotExist, CharField
+from django.conf import settings
 
 def get_search_fieldname(model):
     # If model has field 'title' then use that, else use the first 
@@ -15,3 +16,8 @@ def get_search_fieldname(model):
     if not fieldname:
         raise RuntimeError, "Cannot determine fieldname"
     return fieldname
+
+def get_threshold_for_model(model):    
+    key = '%s.%s' % (model._meta.app_label, model._meta.module_name)
+    return getattr(settings, 'SIMPLE_AUTOCOMPLETE', {}).get(key, {}).get('threshold', None)
+

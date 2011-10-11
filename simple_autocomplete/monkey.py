@@ -22,7 +22,10 @@ def ModelChoiceField__init__(self, queryset, empty_label=u"---------", cache_cho
     # Monkey starts here
     if self.__class__ in (ModelChoiceField, ModelMultipleChoiceField):
         key = '%s.%s' % (queryset.model._meta.app_label, queryset.model._meta.module_name)
-        if key in getattr(settings, 'SIMPLE_AUTOCOMPLETE_MODELS', []):
+        # Handle both legacy settings SIMPLE_AUTOCOMPLETE_MODELS and new
+        # setting SIMPLE_AUTOCOMPLETE.
+        models = getattr(settings, 'SIMPLE_AUTOCOMPLETE_MODELS', getattr(settings, 'SIMPLE_AUTOCOMPLETE', {}).keys()) 
+        if key in models:
             pickled = pickle.dumps((
                 queryset.model._meta.app_label, 
                 queryset.model._meta.module_name, 
