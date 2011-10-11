@@ -54,15 +54,15 @@ class AutoCompleteWidget(Select):
                 fieldname = get_search_fieldname(self.model)            
                 if value:            
                     display = getattr(queryset.get(pk=value), fieldname)
-
+            
             html = """
     <script type="text/javascript">
     $(document).ready(function(){
 
-    $("#id_%s_helper").autocomplete({
+    $("#id_%(name)s_helper").autocomplete({
         source: function(request, response){
             $.ajax({
-                url: "%s",
+                url: "%(url)s",
                 data: {q: request.term},
                 success: function(data) {
                     if (data != 'CACHE_MISS')                    
@@ -77,15 +77,16 @@ class AutoCompleteWidget(Select):
                 dataType: "json"
             });
         },
-        select: function(event, ui) { $('#id_%s').val(ui.item.real_value); },
+        select: function(event, ui) { $('#id_%(name)s').val(ui.item.real_value); },
         minLength: 3
     });
 
     });
     </script>
 
-<input id="id_%s_helper" type="text" value="%s" />
-<input name="%s" id="id_%s" type="hidden" value="%s" />""" % (name, url, name, name, display, name, name, value)
+<input id="id_%(name)s_helper" type="text" value="%(display)s" />
+<a href="#" title="Clear" onclick="$('#id_%(name)s_helper').val(''); $('#id_%(name)s').val(''); return false;">x<small></small></a>
+<input name="%(name)s" id="id_%(name)s" type="hidden" value="%(value)s" />""" % dict(name=name, url=url, display=display, value=value)
             return mark_safe(html)
 
 
@@ -184,6 +185,7 @@ class AutoCompleteMultipleWidget(SelectMultiple):
             html += "</div>"
 
             # Help with green plus icon alignment
+            # todo: use css class
             html += """<div style="display: inline-block; width: 104px;">&nbsp;</div>"""
 
             return mark_safe(html)
