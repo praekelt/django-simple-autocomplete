@@ -14,9 +14,7 @@ Installation
 
 #. Add (r'^simple-autocomplete/', include('simple_autocomplete.urls')) to urlpatterns.
 
-#. Ensure jQuery core, jQuery UI Javascript and jQuery UI CSS is loaded by your
-templates. Your jQueryUI bundle must include the autocomplete widget described
-at http://docs.jquery.com/UI/Autocomplete.
+#. Ensure jQuery core, jQuery UI Javascript and jQuery UI CSS is loaded by your templates. Your jQueryUI bundle must include the autocomplete widget described at http://docs.jquery.com/UI/Autocomplete.
 
 Usage
 -----
