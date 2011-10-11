@@ -28,6 +28,16 @@ For instance, to use the autocomplete widget when selecting a user do::
     
     SIMPLE_AUTOCOMPLETE_MODELS = ('auth.user',)
 
+For more parameters set the SIMPLE_AUTOCOMPLETE dictionary in your settings
+file. The example above then becomes::
+
+    SIMPLE_AUTOCOMPLETE = {'auth.user': {'threshold':10}}
+
+The dictionary format allows arbitrary parameters to be introduced in future.
+Parameter ``threshold`` indicates the minimum number of options required before
+the widget is rendered as an autocomplete widget.  If the threshold is not met
+the default widget is rendered.
+
 The product attempts to use a field ``title`` for filtering and display in
 the list. If the model has no field ``title`` then the first CharField is
 used. Eg. for the user model the field ``username`` is used.
