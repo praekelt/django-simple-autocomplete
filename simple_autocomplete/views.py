@@ -1,6 +1,6 @@
-from django.utils import simplejson    
 import pickle
 
+from django.utils import simplejson
 from django.http import HttpResponse
 from django.db.models.query import QuerySet
 from django.db.models import get_model
