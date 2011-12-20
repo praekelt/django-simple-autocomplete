@@ -64,7 +64,7 @@ class AutoCompleteWidget(Select):
                 if value:
                     display = getattr(queryset.get(pk=value), fieldname)
 
-            html = """
+        html = """
     <script type="text/javascript">
     $(document).ready(function(){
 
@@ -96,7 +96,7 @@ class AutoCompleteWidget(Select):
 <input id="id_%(name)s_helper" type="text" value="%(display)s" />
 <a href="#" title="Clear" onclick="$('#id_%(name)s_helper').val(''); $('#id_%(name)s').val(''); return false;">x<small></small></a>
 <input name="%(name)s" id="id_%(name)s" type="hidden" value="%(value)s" />""" % dict(name=name, url=url, display=display, value=value)
-            return mark_safe(html)
+        return mark_safe(html)
 
 
 class AutoCompleteMultipleWidget(SelectMultiple):
