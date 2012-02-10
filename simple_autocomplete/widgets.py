@@ -75,6 +75,7 @@ class AutoCompleteWidget(Select):
                 data: {q: request.term},
                 success: function(data) {
                     if (data != 'CACHE_MISS')
+                    {
                         response($.map(data, function(item) {
                             return {
                                 label: item[1],
@@ -82,6 +83,7 @@ class AutoCompleteWidget(Select):
                                 real_value: item[0]
                             };
                         }));
+                    }
                 },
                 dataType: "json"
             });
@@ -94,7 +96,7 @@ class AutoCompleteWidget(Select):
     </script>
 
 <input id="id_%(name)s_helper" type="text" value="%(display)s" />
-<a href="#" title="Clear" onclick="$('#id_%(name)s_helper').val(''); $('#id_%(name)s').val(''); return false;">x<small></small></a>
+<a href="#" title="Clear" onclick="$('#id_%(name)s_helper').val(''); $('#id_%(name)s_helper').focus(); $('#id_%(name)s').val(''); return false;">x<small></small></a>
 <input name="%(name)s" id="id_%(name)s" type="hidden" value="%(value)s" />""" % dict(name=name, url=url, display=display, value=value)
         return mark_safe(html)
 
@@ -179,7 +181,12 @@ class AutoCompleteMultipleWidget(SelectMultiple):
             var name = '%s';
             var parent = $('#id_' + name).parent();
             var target = $('div.autocomplete-placeholder', parent);
-            target.append('<p><input name="' + name + '" value="' + ui.item.real_value + '" type="hidden" />' + ui.item.value + ' <a href="#" title="Remove" onclick="$(this).parent().remove(); return false;">x<small></small></a></p>');
+            target.append('<p><input name="' + name + '" value="' + ui.item.real_value + '" ' 
+                + 'type="hidden" />' + ui.item.value 
+                + ' <a href="#" title="Remove" onclick="$(this).parent().remove(); $('+"'"+'#id_%s_helper'+"'"+').val(' + "''" + '); $('+"'"+'#id_%s_helper'+"'"+').focus(); return false;">x<small></small></a></p>');
+        },
+        close: function(event, ui) {
+            $('#id_%s_helper').val('');
         },
         minLength: 3
     });
@@ -189,13 +196,13 @@ class AutoCompleteMultipleWidget(SelectMultiple):
 
 <input id="id_%s_helper" type="text" value="" />
 <input id="id_%s" type="hidden" value="" />
-<div class="autocomplete-placeholder">""" % (name, url, name, name, name)
+<div class="autocomplete-placeholder">""" % (name, url, name, name, name, name, name, name)
 
             # Create html for existing values
             for v in value:
                 display = getattr(queryset.get(pk=v), fieldname)
                 html += """<p><input name="%s" type="hidden" value="%s" />
-%s <a href="#" title="Remove" onclick="$(this).parent().remove(); return false;">x<small></small></a></p>""" % (name, v, display)
+%s <a href="#" title="Remove" onclick="$(this).parent().remove(); $('#id_%s_helper').val(''); $('#id_%s_helper').focus(); return false;">x<small></small></a></p>""" % (name, v, display, name, name)
 
             html += "</div>"
 

@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.2 unreleased
+--------------
+#. Clear autoselect helper in some cases for cleaner UI.
+
 0.1
 ---
 #. Add autocomplete widget for multiple selections
