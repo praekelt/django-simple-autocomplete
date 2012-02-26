@@ -64,7 +64,7 @@ class AutoCompleteWidget(Select):
                 if value:
                     display = getattr(queryset.get(pk=value), fieldname)
 
-        html = """
+        html = u"""
     <script type="text/javascript">
     $(document).ready(function(){
 
@@ -155,7 +155,7 @@ class AutoCompleteMultipleWidget(SelectMultiple):
                 url = reverse('simple-autocomplete', args=[self.token])
                 fieldname = get_search_fieldname(self.model)
 
-            html = """
+            html = u"""
     <script type="text/javascript">
     $(document).ready(function(){
 

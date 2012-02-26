@@ -1,4 +1,1 @@
-1. admin/templates/admin/includes/fieldset.html does not mark {{ field.field }}
-as safe, eg.  {{ field.field|safe }}. Whenever the admin form encounters this
-configuration, eg. when adding a comment, the widget is escaped and the
-Javascript cannot fire.
+None
