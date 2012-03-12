@@ -62,7 +62,7 @@ class AutoCompleteWidget(Select):
                 url = reverse('simple-autocomplete', args=[self.token])
                 fieldname = get_search_fieldname(self.model)
                 if value:
-                    display = getattr(queryset.get(pk=value), fieldname)
+                    display = str(queryset.get(pk=value))
 
         html = u"""
     <script type="text/javascript">
@@ -200,7 +200,7 @@ class AutoCompleteMultipleWidget(SelectMultiple):
 
             # Create html for existing values
             for v in value:
-                display = getattr(queryset.get(pk=v), fieldname)
+                display = str(queryset.get(pk=v))
                 html += """<p><input name="%s" type="hidden" value="%s" />
 %s <a href="#" title="Remove" onclick="$(this).parent().remove(); $('#id_%s_helper').val(''); $('#id_%s_helper').focus(); return false;">x<small></small></a></p>""" % (name, v, display, name, name)
 

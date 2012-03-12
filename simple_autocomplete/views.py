@@ -23,7 +23,7 @@ def get_json(request, token):
             di = {'%s__istartswith' % fieldname: searchtext}
             items = queryset.filter(**di).order_by(fieldname)[:10]
             for item in items:
-                result.append((item.id, getattr(item, fieldname)))
+                result.append((item.id, str(item)))
         else:
             result = 'CACHE_MISS'
     return HttpResponse(simplejson.dumps(result))
