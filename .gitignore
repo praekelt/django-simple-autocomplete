@@ -6,3 +6,5 @@ build/
 dist/
 *.swo
 /docs/_build
+coverage.xml
+pep8.txt
