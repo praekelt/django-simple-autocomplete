@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.2 unreleased
---------------
+0.2
+---
 #. Clear autoselect helper in some cases for cleaner UI.
 #. Use object string representation for display and not lookup fieldname.
 
