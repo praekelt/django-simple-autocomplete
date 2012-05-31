@@ -1,4 +1,3 @@
-import pickle
 import hashlib
 from django.forms.models import ModelChoiceField, ModelMultipleChoiceField
 from django.conf import settings
@@ -29,13 +28,13 @@ def ModelChoiceField__init__(self, queryset, empty_label=u"---------",
             getattr(settings, 'SIMPLE_AUTOCOMPLETE', {}).keys()
         )
         if key in models:
-            pickled = pickle.dumps((
+            tu = (
                 queryset.model._meta.app_label,
                 queryset.model._meta.module_name,
                 queryset.query
-            ))
-            token = hashlib.md5(pickled).hexdigest()
-            cache.set(token, pickled)
+            )
+            token = hashlib.md5(str(tu)).hexdigest()
+            cache.set(token, tu)
             if self.__class__ == ModelChoiceField:
                 widget = AutoCompleteWidget(token=token, model=queryset.model)
             else:

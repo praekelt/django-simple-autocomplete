@@ -1,5 +1,3 @@
-import pickle
-
 from django.utils import simplejson
 from django.http import HttpResponse
 from django.db.models.query import QuerySet
@@ -14,9 +12,9 @@ def get_json(request, token):
     result = []
     searchtext = request.GET['q']
     if len(searchtext) >= 3:
-        pickled = cache.get(token, None)
-        if pickled is not None:
-            app_label, model_name, query = pickle.loads(pickled)
+        tu = cache.get(token, None)
+        if tu is not None:
+            app_label, model_name, query = tu
             model = get_model(app_label, model_name)
             queryset = QuerySet(model=model, query=query)
             fieldname = get_search_fieldname(model)

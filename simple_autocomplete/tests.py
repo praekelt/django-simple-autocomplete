@@ -1,5 +1,4 @@
 import simplejson
-import pickle
 import hashlib
 
 from django.db import models
@@ -57,9 +56,13 @@ class TestCase(TestCase):
         )
 
     def test_json(self):
-        # Find our token in cache
-        for token, pickled in cache._cache.items():
-            app_label, model_name, dc = pickle.loads(pickled)
+        # Find our token in cache. Need to drop to low level API. Can't rely
+        # on items() since values are encoded.
+        for key in cache._cache.keys():
+            # Use low level API knowledge to get token
+            token = key[3:]
+            tu = cache.get(token, (None, None, None))
+            app_label, model_name, dc = tu
             if (app_label == 'auth') and (model_name == 'user'):
                 break
 
