@@ -4,9 +4,9 @@ from django.forms.widgets import Select, SelectMultiple
 from django.utils.safestring import mark_safe
 from django.db.models.query import QuerySet
 from django.core.urlresolvers import reverse
+from django.core.cache import cache
 from django.conf import settings
 
-from simple_autocomplete.monkey import _simple_autocomplete_queryset_cache
 from simple_autocomplete.utils import get_search_fieldname, \
     get_threshold_for_model
 
@@ -49,7 +49,7 @@ class AutoCompleteWidget(Select):
 
         else:
             dc, dc, query = pickle.loads(
-                _simple_autocomplete_queryset_cache[self.token]
+                cache.get(self.token)
             )
             queryset = QuerySet(model=self.model, query=query)
             threshold = get_threshold_for_model(self.model)
@@ -142,7 +142,7 @@ class AutoCompleteMultipleWidget(SelectMultiple):
             display = self.initial_display
         else:
             dc, dc, query = pickle.loads(
-                _simple_autocomplete_queryset_cache[self.token]
+                cache.get(self.token)
             )
             queryset = QuerySet(model=self.model, query=query)
             threshold = get_threshold_for_model(self.model)

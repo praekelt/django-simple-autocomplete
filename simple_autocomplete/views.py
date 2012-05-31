@@ -4,8 +4,8 @@ from django.utils import simplejson
 from django.http import HttpResponse
 from django.db.models.query import QuerySet
 from django.db.models import get_model
+from django.core.cache import cache
 
-from simple_autocomplete.monkey import _simple_autocomplete_queryset_cache
 from simple_autocomplete.utils import get_search_fieldname
 
 
@@ -14,7 +14,7 @@ def get_json(request, token):
     result = []
     searchtext = request.GET['q']
     if len(searchtext) >= 3:
-        pickled = _simple_autocomplete_queryset_cache.get(token, None)
+        pickled = cache.get(token, None)
         if pickled is not None:
             app_label, model_name, query = pickle.loads(pickled)
             model = get_model(app_label, model_name)

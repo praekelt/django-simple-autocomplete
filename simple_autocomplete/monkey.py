@@ -1,11 +1,9 @@
 import pickle
 import hashlib
-
 from django.forms.models import ModelChoiceField, ModelMultipleChoiceField
 from django.conf import settings
 from django.forms.fields import Field
-
-_simple_autocomplete_queryset_cache = {}
+from django.core.cache import cache
 
 from simple_autocomplete.widgets import AutoCompleteWidget, \
     AutoCompleteMultipleWidget
@@ -37,7 +35,7 @@ def ModelChoiceField__init__(self, queryset, empty_label=u"---------",
                 queryset.query
             ))
             token = hashlib.md5(pickled).hexdigest()
-            _simple_autocomplete_queryset_cache[token] = pickled
+            cache.set(token, pickled)
             if self.__class__ == ModelChoiceField:
                 widget = AutoCompleteWidget(token=token, model=queryset.model)
             else:

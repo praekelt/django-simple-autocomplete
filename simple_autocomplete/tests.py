@@ -11,9 +11,9 @@ from django.test.client import Client as BaseClient, FakePayload, \
     RequestFactory
 from django.core.handlers.wsgi import WSGIRequest
 from django.core.urlresolvers import reverse
+from django.core.cache import cache
 
 from simple_autocomplete.widgets import AutoCompleteWidget
-from simple_autocomplete.monkey import _simple_autocomplete_queryset_cache
 
 
 class DummyModel(models.Model):
@@ -58,7 +58,7 @@ class TestCase(TestCase):
 
     def test_json(self):
         # Find our token in cache
-        for token, pickled in _simple_autocomplete_queryset_cache.items():
+        for token, pickled in cache._cache.items():
             app_label, model_name, dc = pickle.loads(pickled)
             if (app_label == 'auth') and (model_name == 'user'):
                 break
