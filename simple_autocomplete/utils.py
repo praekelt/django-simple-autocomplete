@@ -19,8 +19,12 @@ def get_search_fieldname(model):
     return fieldname
 
 
-def get_threshold_for_model(model):
+def _get_config_for_model(model, attr):
     key = '%s.%s' % (model._meta.app_label, model._meta.module_name)
     return getattr(settings, 'SIMPLE_AUTOCOMPLETE', {}).get(
-        key, {}).get('threshold', None
+        key, {}).get(attr, None
     )
+    
+
+get_threshold_for_model = lambda model: _get_config_for_model(model, 'threshold')
+get_max_items_for_model = lambda model: _get_config_for_model(model, 'max_items')
