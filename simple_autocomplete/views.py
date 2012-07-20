@@ -4,6 +4,7 @@ from django.utils import simplejson
 from django.http import HttpResponse
 from django.db.models.query import QuerySet
 from django.db.models import get_model
+from django.conf import settings
 
 from simple_autocomplete.monkey import _simple_autocomplete_queryset_cache
 from simple_autocomplete.utils import get_search_fieldname
@@ -21,7 +22,9 @@ def get_json(request, token):
             queryset = QuerySet(model=model, query=query)
             fieldname = get_search_fieldname(model)
             di = {'%s__istartswith' % fieldname: searchtext}
-            items = queryset.filter(**di).order_by(fieldname)[:10]
+            key = '%s.%s' % (app_label, model_name)
+            max_items = getattr(settings, 'SIMPLE_AUTOCOMPLETE', {}).get(key, {}).get('max_items', 10)
+            items = queryset.filter(**di).order_by(fieldname)[:max_items]
             for item in items:
                 result.append((item.id, str(item)))
         else:
