@@ -166,6 +166,7 @@ class AutoCompleteMultipleWidget(SelectMultiple):
                 data: {q: request.term},
                 success: function(data) {
                     if (data != 'CACHE_MISS')
+                    {
                         response($.map(data, function(item) {
                             return {
                                 label: item[1],
@@ -173,6 +174,7 @@ class AutoCompleteMultipleWidget(SelectMultiple):
                                 real_value: item[0]
                             };
                         }));
+                    }
                 },
                 dataType: "json"
             });

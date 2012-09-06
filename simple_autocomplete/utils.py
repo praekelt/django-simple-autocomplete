@@ -24,3 +24,7 @@ def get_threshold_for_model(model):
     return getattr(settings, 'SIMPLE_AUTOCOMPLETE', {}).get(
         key, {}).get('threshold', None
     )
+
+
+def get_setting(app_label_model, key, default):
+    return getattr(settings, 'SIMPLE_AUTOCOMPLETE', {}).get(app_label_model, {}).get(key, default)

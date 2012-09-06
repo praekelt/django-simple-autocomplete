@@ -1,4 +1,3 @@
-import simplejson
 import pickle
 import hashlib
 
@@ -11,6 +10,7 @@ from django.test.client import Client as BaseClient, FakePayload, \
     RequestFactory
 from django.core.handlers.wsgi import WSGIRequest
 from django.core.urlresolvers import reverse
+from django.utils import simplejson
 
 from simple_autocomplete.widgets import AutoCompleteWidget
 from simple_autocomplete.monkey import _simple_autocomplete_queryset_cache
