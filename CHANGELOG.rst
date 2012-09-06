@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+0.3
+---
 #. `max_items` setting specifies maximum number of items to display in autocomplete dropdown.
 #. `duplicate_format_function` setting allows appending of a custom string if more than one item in the autocomplete dropdown has the same string value. 
 
