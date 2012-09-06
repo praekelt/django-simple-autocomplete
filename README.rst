@@ -46,9 +46,9 @@ It defaults to displaying the content type name. Set it using a lambda function,
 
     SIMPLE_AUTOCOMPLETE = {'auth.user': {'duplicate_format_function': lambda obj, model, content_type: 'id: %s' % obj.id}}
 
-The product attempts to use a field ``title`` for filtering and display in
-the list. If the model has no field ``title`` then the first CharField is
-used. Eg. for the user model the field ``username`` is used.
+The product attempts to use a field ``title`` for filtering the list. If the
+model has no field ``title`` then the first CharField is used. Eg. for the user
+model the field ``username`` is used.
 
 The widget can be used implicitly in a form. The declaration of
 ``ModelChoiceField`` is all that is required::
