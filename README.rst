@@ -21,20 +21,30 @@ Usage
 
 Django by default renders a select widget (a.k.a. combobox or dropdown) for
 foreign key fields. You can change the widget to an autocomplete widget by
-adding the model to the SIMPLE_AUTOCOMPLETE_MODELS tuple in your settings file.
-For instance, to use the autocomplete widget when selecting a user do::
+adding the model to the legacy SIMPLE_AUTOCOMPLETE_MODELS tuple in your
+settings file.  For instance, to use the autocomplete widget when selecting a
+user do::
     
     SIMPLE_AUTOCOMPLETE_MODELS = ('auth.user',)
 
-For more parameters set the SIMPLE_AUTOCOMPLETE dictionary in your settings
-file. The example above then becomes::
+For more parameters set the preferred SIMPLE_AUTOCOMPLETE dictionary in your
+settings file. The example above then becomes::
 
-    SIMPLE_AUTOCOMPLETE = {'auth.user': {'threshold':10}}
+    SIMPLE_AUTOCOMPLETE = {'auth.user': {'threshold': 10}}
 
 The dictionary format allows arbitrary parameters to be introduced in future.
 Parameter ``threshold`` indicates the minimum number of options required before
 the widget is rendered as an autocomplete widget.  If the threshold is not met
 the default widget is rendered.
+
+Parameter ``max_items`` indicates the maximum number of matches to display in the autocomplete dropdown. It defaults to 10.::
+
+    SIMPLE_AUTOCOMPLETE = {'auth.user': {'max_items': 10}}
+
+Parameter ``duplicate_format_function`` is a lambda function that enables a custom string should more than one item in the autocomplete dropdown have the same string value. 
+It defaults to displaying the content type name. Set it using a lambda function, eg.::
+
+    SIMPLE_AUTOCOMPLETE = {'auth.user': {'duplicate_format_function': lambda obj, model, content_type: 'id: %s' % obj.id}}
 
 The product attempts to use a field ``title`` for filtering and display in
 the list. If the model has no field ``title`` then the first CharField is

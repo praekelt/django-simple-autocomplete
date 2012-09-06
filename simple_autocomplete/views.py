@@ -4,10 +4,11 @@ from django.utils import simplejson
 from django.http import HttpResponse
 from django.db.models.query import QuerySet
 from django.db.models import get_model
+from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 
 from simple_autocomplete.monkey import _simple_autocomplete_queryset_cache
-from simple_autocomplete.utils import get_search_fieldname
+from simple_autocomplete.utils import get_search_fieldname, get_setting
 
 
 def get_json(request, token):
@@ -22,11 +23,31 @@ def get_json(request, token):
             queryset = QuerySet(model=model, query=query)
             fieldname = get_search_fieldname(model)
             di = {'%s__istartswith' % fieldname: searchtext}
-            key = '%s.%s' % (app_label, model_name)
-            max_items = getattr(settings, 'SIMPLE_AUTOCOMPLETE', {}).get(key, {}).get('max_items', 10)
+            app_label_model = '%s.%s' % (app_label, model_name)
+            max_items = get_setting(app_label_model, 'max_items', 10)
             items = queryset.filter(**di).order_by(fieldname)[:max_items]
+
+            # Check for duplicate strings
+            counts = {}
             for item in items:
-                result.append((item.id, str(item)))
+                key = str(item) 
+                counts.setdefault(key, 0)
+                counts[key] += 1
+
+            # Assemble result set
+            for item in items:
+                key = value = str(item)
+                if counts[key] > 1:
+                    func = get_setting(
+                        app_label_model, 
+                        'duplicate_format_function', 
+                        lambda obj, model, content_type: content_type.name
+                    )
+                    content_type = ContentType.objects.get_for_model(model)
+                    value = '%s (%s)' % (value, func(item, model, content_type))
+                result.append((item.id, value))
+
         else:
             result = 'CACHE_MISS'
+
     return HttpResponse(simplejson.dumps(result))
