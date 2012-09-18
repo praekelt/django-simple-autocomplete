@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import pickle
 import hashlib
 
@@ -44,6 +46,10 @@ class TestCase(TestCase):
             'adam', 'adam@foo.com', 'password'
         )
         self.eve = User.objects.create_user('eve', 'eve@foo.com', 'password')
+        self.andre = User.objects.create_user(
+            'andré', 'andre@foo.com', 'password'
+        )
+
         self.dummy = DummyModel()
         self.dummy.save()
         self.request = RequestFactory()
@@ -67,3 +73,15 @@ class TestCase(TestCase):
         response = self.client.get(url, {'q': 'ada'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, """[[1, "adam"]]""")
+
+    def test_unicode(self):
+        # Find our token in cache
+        for token, pickled in _simple_autocomplete_queryset_cache.items():
+            app_label, model_name, dc = pickle.loads(pickled)
+            if (app_label == 'auth') and (model_name == 'user'):
+                break
+
+        url = reverse('simple-autocomplete', args=[token])
+        response = self.client.get(url, {'q': 'andr'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, """[[3, "andr\u00e9"]]""")

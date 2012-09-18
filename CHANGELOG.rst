@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Fix unicode bug.
+
 0.3
 ---
 #. `max_items` setting specifies maximum number of items to display in autocomplete dropdown.
