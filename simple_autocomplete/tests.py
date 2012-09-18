@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import pickle
 import hashlib
 
@@ -47,7 +49,6 @@ class TestCase(TestCase):
         self.andre = User.objects.create_user(
             'andré', 'andre@foo.com', 'password'
         )
-        self.eve = User.objects.create_user('eve', 'eve@foo.com', 'password')
 
         self.dummy = DummyModel()
         self.dummy.save()
@@ -83,4 +84,4 @@ class TestCase(TestCase):
         url = reverse('simple-autocomplete', args=[token])
         response = self.client.get(url, {'q': 'andr'})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, """[[1, "andré"]]""")
+        self.assertEqual(response.content, """[[3, "andr\u00e9"]]""")
