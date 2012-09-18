@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+0.3.1
+-----
 #. Fix unicode bug.
 
 0.3
