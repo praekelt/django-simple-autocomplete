@@ -3,7 +3,8 @@ from django.conf import settings
 
 
 def get_search_fieldname(model):
-    # If model has field 'title' then use that, else use the first
+    # If model has 'search_field' settings use that. Otherwise, if
+    # model has field 'title' then use that, else use the first
     # CharField on model.
     fieldname = get_setting("%s.%s" % (model._meta.app_label, model.__name__.lower()), \
 	'search_field', '')
