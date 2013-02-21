@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.3.2
+-----
+#. Allow `search_field` to be specified per model, in case the defaults don't suffice.
+
 0.3.1
 -----
 #. Fix unicode bug.
