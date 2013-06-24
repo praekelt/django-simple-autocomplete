@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+0.3.3
+-----
 #. Tests failing for Django 1.5. Pin to 1.4.x until that is fixed.
 #. Handle case where an item that is referenced by a multiselect has been deleted from the database.
 
