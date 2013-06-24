@@ -202,6 +202,7 @@ class AutoCompleteMultipleWidget(SelectMultiple):
 
             # Create html for existing values
             for v in value:
+                if v is None: continue
                 display = unicode(queryset.get(pk=v))
                 html += """<p><input name="%s" type="hidden" value="%s" />
 %s <a href="#" title="Remove" onclick="$(this).parent().remove(); $('#id_%s_helper').val(''); $('#id_%s_helper').focus(); return false;">x<small></small></a></p>""" % (name, v, display, name, name)
