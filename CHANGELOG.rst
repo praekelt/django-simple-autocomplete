@@ -1,6 +1,11 @@
 Changelog
 =========
 
+next
+----
+#. Tests failing for Django 1.5. Pin to 1.4.x until that is fixed.
+#. Handle case where an item that is referenced by a multiselect has been deleted from the database.
+
 0.3.2
 -----
 #. Allow `search_field` to be specified per model, in case the defaults don't suffice.

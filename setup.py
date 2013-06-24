@@ -13,7 +13,7 @@ setup(
     dependency_links = [
     ],
     install_requires = [
-        'django',
+        'django>=1.4,<1.5',
     ],
     tests_require=[
         'django-setuptest>=0.1.2',
