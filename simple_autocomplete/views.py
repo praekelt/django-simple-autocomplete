@@ -30,7 +30,7 @@ def get_json(request, token):
             # Check for duplicate strings
             counts = {}
             for item in items:
-                key = unicode(item) 
+                key = unicode(item)
                 counts.setdefault(key, 0)
                 counts[key] += 1
 
@@ -39,8 +39,8 @@ def get_json(request, token):
                 key = value = unicode(item)
                 if counts[key] > 1:
                     func = get_setting(
-                        app_label_model, 
-                        'duplicate_format_function', 
+                        app_label_model,
+                        'duplicate_format_function',
                         lambda obj, model, content_type: content_type.name
                     )
                     content_type = ContentType.objects.get_for_model(model)

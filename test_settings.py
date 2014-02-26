@@ -23,4 +23,4 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
-SIMPLE_AUTOCOMPLETE_MODELS = ('auth.user',)
+SIMPLE_AUTOCOMPLETE = {'auth.user': {'search_field': 'username'}}

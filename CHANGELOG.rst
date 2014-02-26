@@ -1,6 +1,11 @@
 Changelog
 =========
 
+next
+----
+#. Deprecate `SIMPLE_AUTOCOMPLETE_MODELS` setting.
+#. Django 1.6.2 compatibility.
+
 0.3.3
 -----
 #. Tests failing for Django 1.5. Pin to 1.4.x until that is fixed.
