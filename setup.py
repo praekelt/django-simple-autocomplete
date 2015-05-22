@@ -13,10 +13,10 @@ setup(
     dependency_links = [
     ],
     install_requires = [
-        'django>=1.4',
+        'django>=1.4,<1.7',
     ],
     tests_require=[
-        'django-setuptest>=0.1.4',
+        'django-setuptest>=0.1.6',
     ],
     test_suite="setuptest.setuptest.SetupTestSuite",
     classifiers=[
