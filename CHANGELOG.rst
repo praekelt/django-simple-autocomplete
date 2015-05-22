@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+0.5
+---
 #. Preserve sort order of multiple choice values.
 
 0.4
