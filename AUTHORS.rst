@@ -1,7 +1,7 @@
 Authors
 =======
 
-Praekelt Foundation
+Praekelt Consulting
 -------------------
 * Hedley Roos
 
