@@ -56,3 +56,17 @@ def ModelChoiceField__init__(self, queryset, empty_label=u"---------",
     self.to_field_name = to_field_name
 
 ModelChoiceField.__init__ = ModelChoiceField__init__
+
+
+# Preserve sort order of multiple choice values
+def clean_decorator(func):
+    def new(self, value):
+        qs = func(self, value)
+        li = [o for o in qs]
+        li.sort(
+            lambda a, b: cmp(value.index(str(a.pk)), value.index(str(b.pk)))
+        )
+        return li
+    return new
+
+ModelMultipleChoiceField.clean = clean_decorator(ModelMultipleChoiceField.clean)
