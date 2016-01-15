@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.5.1
+-----
+#. Only apply autocomplete in cases where a default widget isn't supplied. This enables the product to work harmoniously with eg. Grappelli's autocomplete.
+
 0.5
 ---
 #. Preserve sort order of multiple choice values.

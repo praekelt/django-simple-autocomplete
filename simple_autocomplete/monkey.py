@@ -21,7 +21,7 @@ def ModelChoiceField__init__(self, queryset, empty_label=u"---------",
     self.cache_choices = cache_choices
 
     # Monkey starts here
-    if self.__class__ in (ModelChoiceField, ModelMultipleChoiceField):
+    if (widget is None) and self.__class__ in (ModelChoiceField, ModelMultipleChoiceField):
         meta = queryset.model._meta
         key = '%s.%s' % (meta.app_label, meta.module_name)
         # Handle both legacy settings SIMPLE_AUTOCOMPLETE_MODELS and new

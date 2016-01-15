@@ -7,13 +7,13 @@ def get_search_fieldname(model):
     # model has field 'title' then use that, else use the first
     # CharField on model.
     fieldname = get_setting("%s.%s" % (model._meta.app_label, model.__name__.lower()), \
-	'search_field', '')
+        'search_field', '')
     if fieldname:
-	try:
-	    model._meta.get_field_by_name(fieldname)
-	except FieldDoesNotExist:
-	    raise RuntimeError("Field '%s.%s' does not exist" % (model._meta.app_label, \
-		model.__name__.lower()))
+        try:
+            model._meta.get_field_by_name(fieldname)
+        except FieldDoesNotExist:
+            raise RuntimeError("Field '%s.%s' does not exist" % (model._meta.app_label, \
+                model.__name__.lower()))
     else:
         try:
             model._meta.get_field_by_name('title')
