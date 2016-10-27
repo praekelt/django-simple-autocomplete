@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+0.5.2
+-----
 #. If a search field is supplied then the dropdown now shows those attributes, not the objects string representation.
 
 0.5.1
