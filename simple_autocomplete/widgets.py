@@ -60,7 +60,6 @@ class AutoCompleteWidget(Select):
                 )
             else:
                 url = reverse('simple-autocomplete', args=[self.token])
-                fieldname = get_search_fieldname(self.model)
                 if value:
                     display = unicode(queryset.get(pk=value))
 
@@ -153,7 +152,6 @@ class AutoCompleteMultipleWidget(SelectMultiple):
                 )
             else:
                 url = reverse('simple-autocomplete', args=[self.token])
-                fieldname = get_search_fieldname(self.model)
 
             html = u"""
     <script type="text/javascript">

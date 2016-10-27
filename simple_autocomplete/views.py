@@ -37,6 +37,7 @@ def get_json(request, token):
             # Assemble result set
             for item in items:
                 key = value = unicode(item)
+                value = getattr(item, fieldname)
                 if counts[key] > 1:
                     func = get_setting(
                         app_label_model,
