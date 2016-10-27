@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.5.2
+-----
+#. If a search field is supplied then the dropdown now shows those attributes, not the objects string representation.
+
 0.5.1
 -----
 #. Only apply autocomplete in cases where a default widget isn't supplied. This enables the product to work harmoniously with eg. Grappelli's autocomplete.
@@ -30,7 +34,7 @@ Changelog
 0.3
 ---
 #. `max_items` setting specifies maximum number of items to display in autocomplete dropdown.
-#. `duplicate_format_function` setting allows appending of a custom string if more than one item in the autocomplete dropdown has the same string value. 
+#. `duplicate_format_function` setting allows appending of a custom string if more than one item in the autocomplete dropdown has the same string value.
 
 0.2
 ---
