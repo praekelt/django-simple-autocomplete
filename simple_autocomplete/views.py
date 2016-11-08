@@ -1,9 +1,9 @@
 import pickle
+import json
 
-from django.utils import simplejson
 from django.http import HttpResponse
 from django.db.models.query import QuerySet
-from django.db.models import get_model
+from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 
@@ -19,7 +19,7 @@ def get_json(request, token):
         pickled = _simple_autocomplete_queryset_cache.get(token, None)
         if pickled is not None:
             app_label, model_name, query = pickle.loads(pickled)
-            model = get_model(app_label, model_name)
+            model = apps.get_model(app_label, model_name)
             queryset = QuerySet(model=model, query=query)
             fieldname = get_search_fieldname(model)
             di = {'%s__istartswith' % fieldname: searchtext}
@@ -51,4 +51,4 @@ def get_json(request, token):
         else:
             result = 'CACHE_MISS'
 
-    return HttpResponse(simplejson.dumps(result))
+    return HttpResponse(json.dumps(result))

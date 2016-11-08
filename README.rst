@@ -12,9 +12,12 @@ Installation
 
 #. Add ``simple_autocomplete`` to your ``INSTALLED_APPS`` setting.
 
-#. Add (r'^simple-autocomplete/', include('simple_autocomplete.urls')) to urlpatterns.
+#. Add (r'^simple-autocomplete/', include('simple_autocomplete.urls', namespace='simple_autocomplete')) to urlpatterns.
 
-#. Ensure jQuery core, jQuery UI Javascript and jQuery UI CSS is loaded by your templates. Your jQueryUI bundle must include the autocomplete widget described at http://docs.jquery.com/UI/Autocomplete.
+#. Add ``<script src="{{ STATIC_URL }}simple_autocomplete/jquery-ui.js"></script>`` and
+   ``<link rel="stylesheet" href="{{ STATIC_URL }}simple_autocomplete/jquery-ui.css" />`` to your template.
+   You may need to override eg. ``templates/admin/base.html``. If you already have jQuery UI installed for
+   your site you may skip this step.
 
 Usage
 -----
