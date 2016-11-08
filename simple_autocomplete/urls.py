@@ -1,6 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
-urlpatterns = patterns(
-    'simple_autocomplete.views',
-    url(r'^(?P<token>[\w-]+)/$', 'get_json', name='simple-autocomplete'),
-)
+from simple_autocomplete.views import get_json
+
+
+urlpatterns = [
+    url(r'^(?P<token>[\w-]+)/$', get_json, name='simple-autocomplete')
+]

@@ -1,45 +1,28 @@
 # -*- coding: utf-8 -*-
 
 import pickle
-import hashlib
 
-from django.db import models
-from django.contrib.auth.models import User
 from django import forms
-from django.test import TestCase
-from django.conf import settings
-from django.test.client import Client as BaseClient, FakePayload, \
-    RequestFactory
 from django.core.handlers.wsgi import WSGIRequest
 from django.core.urlresolvers import reverse
-from django.utils import simplejson
+from django.contrib.auth.models import User
+from django.test import TestCase
+from django.test.client import Client, RequestFactory
+from django.conf import settings
 
 from simple_autocomplete.widgets import AutoCompleteWidget
 from simple_autocomplete.monkey import _simple_autocomplete_queryset_cache
-
-
-class DummyModel(models.Model):
-    user = models.ForeignKey(User, null=True, blank=True)
-models.register_models('simple_autocomplete', DummyModel)
+from simple_autocomplete.tests.models import DummyModel
 
 
 class EditDummyForm(forms.ModelForm):
+
     class Meta:
         model = DummyModel
+        fields = '__all__'
 
 
-class Client(BaseClient):
-    """Bug in django/test/client.py omits wsgi.input"""
-
-    def _base_environ(self, **request):
-        result = super(Client, self)._base_environ(**request)
-        result['HTTP_USER_AGENT'] = 'Django Unittest'
-        result['HTTP_REFERER'] = 'dummy'
-        result['wsgi.input'] = FakePayload('')
-        return result
-
-
-class TestCase(TestCase):
+class TestItCase(TestCase):
 
     def setUp(self):
         self.adam = User.objects.create_user(
@@ -52,8 +35,8 @@ class TestCase(TestCase):
 
         self.dummy = DummyModel()
         self.dummy.save()
-        self.request = RequestFactory()
         self.client = Client()
+        self.request = RequestFactory()
 
     def test_monkey(self):
         # Are we using the autocomplete widget?
