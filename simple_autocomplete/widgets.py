@@ -59,13 +59,15 @@ class AutoCompleteWidget(Select):
                     name, value, attrs
                 )
             else:
-                url = reverse('simple-autocomplete', args=[self.token])
+                url = reverse('simple_autocomplete:simple-autocomplete', args=[self.token])
                 if value:
                     display = unicode(queryset.get(pk=value))
 
         html = u"""
     <script type="text/javascript">
-    $(document).ready(function(){
+    (function($) {
+
+    $(document).ready(function() {
 
     $("#id_%(name)s_helper").autocomplete({
         source: function(request, response){
@@ -92,10 +94,12 @@ class AutoCompleteWidget(Select):
     });
 
     });
+
+    })(django.jQuery);
     </script>
 
 <input id="id_%(name)s_helper" type="text" value="%(display)s" />
-<a href="#" title="Clear" onclick="$('#id_%(name)s_helper').val(''); $('#id_%(name)s_helper').focus(); $('#id_%(name)s').val(''); return false;">x<small></small></a>
+<a href="#" title="Clear" onclick="django.jQuery('#id_%(name)s_helper').val(''); django.jQuery('#id_%(name)s_helper').focus(); django.jQuery('#id_%(name)s').val(''); return false;">x<small></small></a>
 <input name="%(name)s" id="id_%(name)s" type="hidden" value="%(value)s" />""" % dict(name=name, url=url, display=display, value=value)
         return mark_safe(html)
 
@@ -151,14 +155,16 @@ class AutoCompleteMultipleWidget(SelectMultiple):
                     name, value, attrs
                 )
             else:
-                url = reverse('simple-autocomplete', args=[self.token])
+                url = reverse('simple_autocomplete:simple-autocomplete', args=[self.token])
 
             html = u"""
     <script type="text/javascript">
-    $(document).ready(function(){
+    (function($) {
+
+    $(document).ready(function() {
 
     $("#id_%s_helper").autocomplete({
-        source: function(request, response){
+        source: function(request, response) {
             $.ajax({
                 url: "%s",
                 data: {q: request.term},
@@ -181,9 +187,9 @@ class AutoCompleteMultipleWidget(SelectMultiple):
             var name = '%s';
             var parent = $('#id_' + name).parent();
             var target = $('div.autocomplete-placeholder', parent);
-            target.append('<p><input name="' + name + '" value="' + ui.item.real_value + '" ' 
-                + 'type="hidden" />' + ui.item.value 
-                + ' <a href="#" title="Remove" onclick="$(this).parent().remove(); $('+"'"+'#id_%s_helper'+"'"+').val(' + "''" + '); $('+"'"+'#id_%s_helper'+"'"+').focus(); return false;">x<small></small></a></p>');
+            target.append('<p><input name="' + name + '" value="' + ui.item.real_value + '" '
+                + 'type="hidden" />' + ui.item.value
+                + ' <a href="#" title="Remove" onclick="django.jQuery(this).parent().remove(); django.jQuery('+"'"+'#id_%s_helper'+"'"+').val(' + "''" + '); django.jQuery('+"'"+'#id_%s_helper'+"'"+').focus(); return false;">x<small></small></a></p>');
         },
         close: function(event, ui) {
             $('#id_%s_helper').val('');
@@ -192,6 +198,8 @@ class AutoCompleteMultipleWidget(SelectMultiple):
     });
 
     });
+
+    })(django.jQuery);
     </script>
 
 <input id="id_%s_helper" type="text" value="" />

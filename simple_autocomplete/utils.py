@@ -29,7 +29,7 @@ def get_search_fieldname(model):
 
 
 def get_threshold_for_model(model):
-    key = '%s.%s' % (model._meta.app_label, model._meta.module_name)
+    key = '%s.%s' % (model._meta.app_label, model._meta.model_name)
     return getattr(settings, 'SIMPLE_AUTOCOMPLETE', {}).get(
         key, {}).get('threshold', None
     )

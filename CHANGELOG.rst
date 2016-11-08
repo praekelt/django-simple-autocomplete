@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Django 1.9 compatibility. Support for previous versions has been dropped.
+
 0.5.2
 -----
 #. If a search field is supplied then the dropdown now shows those attributes, not the objects string representation.
