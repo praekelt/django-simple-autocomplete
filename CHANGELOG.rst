@@ -1,8 +1,8 @@
 Changelog
 =========
 
-next
-----
+1.9
+---
 #. Django 1.9 compatibility. Support for previous versions has been dropped.
 
 0.5.2
