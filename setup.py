@@ -5,7 +5,7 @@ setup(
     name='django-simple-autocomplete',
     description='App enabling the use of jQuery UI autocomplete widget for ModelChoiceFields with minimal configuration required.',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
-    version='1.9',
+    version='1.9.1',
     author='Praekelt Consulting',
     author_email='dev@praekelt.com',
     license='BSD',
