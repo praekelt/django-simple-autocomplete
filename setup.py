@@ -28,4 +28,5 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
     zip_safe=False,
+    include_package_data=True
 )
