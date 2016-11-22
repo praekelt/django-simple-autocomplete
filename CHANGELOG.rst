@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.9.1
+-----
+#. Ensure the static files are also deployed.
+
 1.9
 ---
 #. Django 1.9 compatibility. Support for previous versions has been dropped.
