@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Django 1.11 compatibility. Correct use of django.jQuery.
+
 1.9.1
 -----
 #. Ensure the static files are also deployed.

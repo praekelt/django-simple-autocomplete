@@ -192,7 +192,7 @@ class AutoCompleteMultipleWidget(SelectMultiple):
                 + ' <a href="#" title="Remove" onclick="django.jQuery(this).parent().remove(); django.jQuery('+"'"+'#id_%s_helper'+"'"+').val(' + "''" + '); django.jQuery('+"'"+'#id_%s_helper'+"'"+').focus(); return false;">x<small></small></a></p>');
         },
         close: function(event, ui) {
-            $('#id_%s_helper').val('');
+            django.jQuery('#id_%s_helper').val('');
         },
         minLength: 3
     });
@@ -211,7 +211,7 @@ class AutoCompleteMultipleWidget(SelectMultiple):
                 if v is None: continue
                 display = unicode(queryset.get(pk=v))
                 html += """<p><input name="%s" type="hidden" value="%s" />
-%s <a href="#" title="Remove" onclick="$(this).parent().remove(); $('#id_%s_helper').val(''); $('#id_%s_helper').focus(); return false;">x<small></small></a></p>""" % (name, v, display, name, name)
+%s <a href="#" title="Remove" onclick="django.jQuery(this).parent().remove(); django.jQuery('#id_%s_helper').val(''); django.jQuery('#id_%s_helper').focus(); return false;">x<small></small></a></p>""" % (name, v, display, name, name)
 
             html += "</div>"
 
