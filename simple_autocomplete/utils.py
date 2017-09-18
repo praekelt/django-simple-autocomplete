@@ -10,13 +10,21 @@ def get_search_fieldname(model):
         'search_field', '')
     if fieldname:
         try:
-            model._meta.get_field_by_name(fieldname)
+            # Django 1.11 deprecates get_field_by_name
+            if hasattr(model._meta, 'get_field_by_name'):
+                model._meta.get_field_by_name(fieldname)
+            else:
+                model._meta.get_field(fieldname)
         except FieldDoesNotExist:
             raise RuntimeError("Field '%s.%s' does not exist" % (model._meta.app_label, \
                 model.__name__.lower()))
     else:
         try:
-            model._meta.get_field_by_name('title')
+            # Django 1.11 deprecates get_field_by_name
+            if hasattr(model._meta, 'get_field_by_name'):
+                model._meta.get_field_by_name('title')
+            else:
+                model._meta.get_field('title')
             fieldname = 'title'
         except FieldDoesNotExist:
             for field in model._meta.fields:
