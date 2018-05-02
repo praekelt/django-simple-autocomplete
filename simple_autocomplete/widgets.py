@@ -64,7 +64,11 @@ class AutoCompleteWidget(Select):
             else:
                 url = reverse('simple_autocomplete:simple-autocomplete', args=[self.token])
                 if value:
-                    display = unicode(queryset.get(pk=value))
+                    obj = queryset.get(pk=value)
+                    if hasattr(obj, "__unicode__"):
+                        display = obj.__unicode__()
+                    else:
+                        display = str(value)
 
         html = u"""
     <script type="text/javascript">
@@ -212,7 +216,12 @@ class AutoCompleteMultipleWidget(SelectMultiple):
             # Create html for existing values
             for v in value:
                 if v is None: continue
-                display = unicode(queryset.get(pk=v))
+                obj = queryset.get(pk=v)
+                if hasattr(obj, "__unicode__"):
+                    display = obj.__unicode__()
+                else:
+                    display = str(value)
+
                 html += """<p><input name="%s" type="hidden" value="%s" />
 %s <a href="#" title="Remove" onclick="django.jQuery(this).parent().remove(); django.jQuery('#id_%s_helper').val(''); django.jQuery('#id_%s_helper').focus(); return false;">x<small></small></a></p>""" % (name, v, display, name, name)
 
