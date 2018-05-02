@@ -3,8 +3,11 @@ import pickle
 from django.forms.widgets import Select, SelectMultiple
 from django.utils.safestring import mark_safe
 from django.db.models.query import QuerySet
-from django.core.urlresolvers import reverse
 from django.conf import settings
+try:
+    from django.urls import reverse
+except:
+    from django.core.urlresolvers import reverse
 
 from simple_autocomplete.monkey import _simple_autocomplete_queryset_cache
 from simple_autocomplete.utils import get_search_fieldname, \

@@ -4,4 +4,4 @@ from django.contrib.auth.models import User
 
 
 class DummyModel(models.Model):
-    user = models.ForeignKey(User, null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)

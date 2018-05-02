@@ -1,6 +1,10 @@
 Changelog
 =========
 
+next
+----
+#. Django 2.0 and Python 3.5 compatibility.
+
 1.11
 ----
 #. Django 1.11 compatibility. Correct use of django.jQuery.

@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import pickle
+import sys
 
 from django import forms
 from django.core.handlers.wsgi import WSGIRequest
-from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.test.client import Client, RequestFactory
 from django.conf import settings
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse
 
 from simple_autocomplete.widgets import AutoCompleteWidget
 from simple_autocomplete.monkey import _simple_autocomplete_queryset_cache
@@ -55,7 +59,7 @@ class TestItCase(TestCase):
         url = reverse('simple-autocomplete', args=[token])
         response = self.client.get(url, {'q': 'ada'})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, """[[1, "adam"]]""")
+        self.assertEqual(response.content.decode("utf-8"), """[[1, "adam"]]""")
 
     def test_unicode(self):
         # Find our token in cache
@@ -67,4 +71,7 @@ class TestItCase(TestCase):
         url = reverse('simple-autocomplete', args=[token])
         response = self.client.get(url, {'q': 'andr'})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, """[[3, "andr\u00e9"]]""")
+        if sys.version_info[0] > 2:
+            self.assertEqual(response.content.decode("utf-8"), """[[3, "andr\\u00e9"]]""")
+        else:
+            self.assertEqual(response.content.decode("utf-8"), """[[3, "andr\u00e9"]]""")
