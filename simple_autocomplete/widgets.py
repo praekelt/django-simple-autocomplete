@@ -68,7 +68,7 @@ class AutoCompleteWidget(Select):
                     if hasattr(obj, "__unicode__"):
                         display = obj.__unicode__()
                     else:
-                        display = str(value)
+                        display = str(obj)
 
         html = u"""
     <script type="text/javascript">
@@ -220,7 +220,7 @@ class AutoCompleteMultipleWidget(SelectMultiple):
                 if hasattr(obj, "__unicode__"):
                     display = obj.__unicode__()
                 else:
-                    display = str(value)
+                    display = str(obj)
 
                 html += """<p><input name="%s" type="hidden" value="%s" />
 %s <a href="#" title="Remove" onclick="django.jQuery(this).parent().remove(); django.jQuery('#id_%s_helper').val(''); django.jQuery('#id_%s_helper').focus(); return false;">x<small></small></a></p>""" % (name, v, display, name, name)
